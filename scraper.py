@@ -43,7 +43,7 @@ for feature in features:
 	deposit['description'] = feature['properties']['description']
 	deposit['date'] = feature['properties']['date']
 	deposit['link'] = feature['properties']['link']
-	deposit['categories'] = parse(feature['properties']['link'])
+	deposit['indicators'] = parse(feature['properties']['link'])
 	where = utm.to_latlon(feature['geometry']['coordinates'][0],feature['geometry']['coordinates'][1], 30, 'U')
 	deposit['position'] = where
 	deposits.append(deposit)
