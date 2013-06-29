@@ -18,18 +18,18 @@ def parse(link):
 	trs = ele.find('table').find_all('tr')
 	trs.pop(0)
 
-	categories = {}
+	indicators = []
 	category = ""
 	for tr in trs:
 		has_category = tr.find('strong')
 		if has_category:
 			category = has_category.text
-			categories[category] = []
 		else:
 			metric = {'name': tr.find('td',  attrs={"headers": "nom"}).text, 
-			'result': tr.find('td',  attrs={"headers": "res"}).text}
-			categories[category].append(metric)
-	return categories
+			'result': tr.find('td',  attrs={"headers": "res"}).text,
+			'category': category}
+			indicators.append(metric)
+	return indicators
 
 
 response = urllib2.urlopen('http://www.zaragoza.es/georref/json/hilo/ver_IMSP')
