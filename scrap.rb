@@ -4,6 +4,8 @@ require 'open-uri'
 require 'json'
 require 'pp'
 require 'hpricot'
+require 'coordinate-converter'
+require 'json'
  
 response = open('http://www.zaragoza.es/georref/json/hilo/ver_IMSP').read
 data = JSON.parse(response)
@@ -40,12 +42,14 @@ data['features'].each { |feature|
     deposit['title'] = feature['properties']['title']
     deposit['description'] = feature['properties']['description']
     deposit['date'] = feature['properties']['date']
-    deposit['UTM_position'] = feature['geometry']['coordinates']
-    #deposit['latlon_position'] = TODO
+    #deposit['UTM_position'] = feature['geometry']['coordinates']
+    deposit['latlon_position'] = Coordinates.utm_to_lat_long("WGS-84", feature['geometry']['coordinates'][1], feature['geometry']['coordinates'][0], "30N")
     deposit['link'] = link
     deposit['indicators'] = scrap(link)
  
     deposits << deposit
 }
  
-PP.pp(deposits)
+puts JSON.pretty_generate(deposits)
+f = File.open('water_zgz.json', 'w')
+f << JSON.generate(deposits)
